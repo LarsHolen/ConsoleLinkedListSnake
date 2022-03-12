@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ConsoleLinkedSnake.Models
 {
     public class SnakeUI
     {
-        private int posX;
-        private int posY;
+        private readonly int posX;
+        private readonly int posY;
 
         public int score = 0;
         public int speed = 0;
@@ -29,8 +26,7 @@ namespace ConsoleLinkedSnake.Models
         {
             Console.SetCursorPosition(posX, posY);
             Console.Write("Score: " + score.ToString());
-            Console.SetCursorPosition(posX, posY+1);
-            Console.Write("Speed: " + speed.ToString());
+            
 
 
         }

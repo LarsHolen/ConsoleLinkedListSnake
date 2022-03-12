@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
 
 namespace ConsoleLinkedSnake.Models
 {
@@ -30,13 +28,18 @@ namespace ConsoleLinkedSnake.Models
         public int MoveY = -1;
 
         public int SnakeLength = 1;
+        public int boardX;
+        public int boardY;
+        
 
-        public Snake(int x, int y, char c = 'O')
+        public Snake(int x, int y, int bx , int by, char c = 'O')
         {
             // Setting the start position and the head character
             X = x;
             Y = y;
             Character = c;
+            boardX = bx;
+            boardY = by;
 
             // Adding the last/erasing tail.  It will write a "space" clearing trail.
             Next = new Tail(this, null, ' ');
@@ -47,7 +50,7 @@ namespace ConsoleLinkedSnake.Models
         /// <summary>
         /// Draws the snake head and tail to the console
         /// </summary>
-        internal void Draw()
+        internal bool Draw()
         {
             // Start moving and drawing the head
             ISnakePart head = this;
@@ -59,6 +62,9 @@ namespace ConsoleLinkedSnake.Models
             // updating the new position
             head.X += MoveX;
             head.Y += MoveY;
+
+            // Hit tests walls and food
+            if (Hittest_walls(head.X, head.Y)) return false;
 
             // Draw the head in the new position
             Console.SetCursorPosition(head.X, head.Y);
@@ -89,7 +95,15 @@ namespace ConsoleLinkedSnake.Models
                 // go to next item in the linked list
                 part = part.Next;
             }
+            return true;
            
+        }
+
+
+        private bool Hittest_walls(int x, int y)
+        {
+            if (x == 0 || x > boardX - 1 || y == 0 || y > boardY - 1) return true;
+            return false;
         }
 
         /// <summary>
@@ -111,6 +125,11 @@ namespace ConsoleLinkedSnake.Models
 
             // Increasing snake length 
             SnakeLength++;
+        }
+
+        internal bool HitFood(List<Point> foodList)
+        {
+            throw new NotImplementedException();
         }
     }
 }

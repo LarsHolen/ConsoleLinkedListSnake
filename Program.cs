@@ -1,5 +1,7 @@
 ﻿using ConsoleLinkedSnake.Models;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Timers;
 
 namespace ConsoleLinkedSnake
@@ -7,19 +9,23 @@ namespace ConsoleLinkedSnake
     class Program
     {
         private static Timer gameTimer;
-        private static Snake snake { get; set; }
+        private static Snake Snake { get; set; }
 
         private static Board board;
         private static int boardSizeX;
         private static int boardSizeY;
 
-        private static int gameSpeed = 300;
+        private static readonly int gameSpeedStart = 300;
+        private static int gameSpeed = gameSpeedStart;
         private static bool gameSpeedChanged = true;
-        private static int gameSpeedIncrease = 10;
+        private static readonly int gameSpeedIncrease = 10;
+
+        private static List<Point> foodList = new();
 
         private static SnakeUI ui;
-        static void Main(string[] args)
+        static void Main()
         {
+            Console.Title = "Console Snake, by Lars Holen";
             Console.Clear();
             Console.CursorVisible = false;
 
@@ -27,14 +33,14 @@ namespace ConsoleLinkedSnake
             boardSizeX = 70;
             boardSizeY = 25;
             ui = new(boardSizeX + 2, 10);
-            //ui.speed = gameSpeed;
             ui.DrawUI();
             gameSpeedChanged = false;
 
             board = new(boardSizeX, boardSizeY);
             board.DrawWalls();
-            snake = new(20,20,'O');
+            Snake = new(20, 20, boardSizeX, boardSizeY, 'O');
             SetGameTimer();
+            AddFood();
 
 
             // Test for key input
@@ -46,42 +52,43 @@ namespace ConsoleLinkedSnake
                 {
 
                     case ConsoleKey.LeftArrow:
-                        snake.MoveX = -1;
-                        snake.MoveY = 0;
+                        Snake.MoveX = -1;
+                        Snake.MoveY = 0;
                         break;
                     case ConsoleKey.UpArrow:
-                        snake.MoveX = 0;
-                        snake.MoveY = -1;
+                        Snake.MoveX = 0;
+                        Snake.MoveY = -1;
                         break;
                     case ConsoleKey.RightArrow:
-                        snake.MoveX = 1;
-                        snake.MoveY = 0;
+                        Snake.MoveX = 1;
+                        Snake.MoveY = 0;
                         break;
                     case ConsoleKey.DownArrow:
-                        snake.MoveX = 0;
-                        snake.MoveY = 1;
+                        Snake.MoveX = 0;
+                        Snake.MoveY = 1;
                         break;
 
                     case ConsoleKey.A:
-                        snake.MoveX = -1;
-                        snake.MoveY = 0;
+                        Snake.MoveX = -1;
+                        Snake.MoveY = 0;
                         break;
                     case ConsoleKey.D:
-                        snake.MoveX = 1;
-                        snake.MoveY = 0;
+                        Snake.MoveX = 1;
+                        Snake.MoveY = 0;
                         break;
                     case ConsoleKey.S:
-                        snake.MoveX = 0;
-                        snake.MoveY = 1;
+                        Snake.MoveX = 0;
+                        Snake.MoveY = 1;
                         break;
                     case ConsoleKey.W:
-                        snake.MoveX = 0;
-                        snake.MoveY = -1;
+                        Snake.MoveX = 0;
+                        Snake.MoveY = -1;
                         break;
                     case ConsoleKey.Spacebar:
 
                         // TOODOOOO Test tailing
-                        snake.AddTail();
+                   
+                        Snake.AddTail();
                         ui.score += 1 * (1000 / gameSpeed);
                         gameSpeed -= gameSpeedIncrease;
                         if (gameSpeed < 10) gameSpeed = 10;
@@ -92,6 +99,12 @@ namespace ConsoleLinkedSnake
                 }
 
             } while (cki.Key != ConsoleKey.Escape);
+        }
+
+        private static void AddFood()
+        {
+            
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -107,10 +120,44 @@ namespace ConsoleLinkedSnake
         }
         private static void OnGameTimerEvent(object sender, ElapsedEventArgs e)
         {
-
-            snake.Draw();
+            
+            if (!Snake.Draw())
+            {
+                GameOver();
+                return;
+            }
+            if (Snake.HitFood(foodList)) Snake.AddTail();
             if(gameSpeedChanged) ui.DrawUI();
             //snake.AddTail();
+        }
+
+        private static void GameOver()
+        {
+            gameTimer.Stop();
+            
+            Console.Clear();
+            Console.SetCursorPosition(boardSizeX / 2 - 4, boardSizeY / 2);
+            Console.Write("Gameover");
+            Console.SetCursorPosition((boardSizeX / 2) - 4, (boardSizeY / 2) + 2);
+            Console.Write("Score: " + ui.score.ToString());
+            Console.SetCursorPosition((boardSizeX / 2) - 4, (boardSizeY / 2) + 4);
+            Console.Write("Press enter to start again");
+            Console.ReadLine();
+            Console.Clear();
+            Restart();
+        }
+
+        private static void Restart()
+        {
+            gameSpeed = gameSpeedStart;
+            ui.score = 0;
+            ui.DrawUI();
+            gameSpeedChanged = false;
+
+            board = new(boardSizeX, boardSizeY);
+            board.DrawWalls();
+            Snake = new(20, 20, boardSizeX, boardSizeY, 'O');
+            SetGameTimer();
         }
     }
 }
