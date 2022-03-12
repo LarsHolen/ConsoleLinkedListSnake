@@ -12,7 +12,7 @@ WIP simple snake console/text game.
   
   Keyboard input WASD/Arrowkeys and space to add to tail
   
-  TODOO:
+  ### TODOO:
   
   Add food to increase length.  ATM the snake grows as one click space.
   Crash tests, walls and tail.
