@@ -30,7 +30,8 @@ namespace ConsoleLinkedSnake.Models
         public int SnakeLength = 1;
         public int boardX;
         public int boardY;
-        
+        public List<Point> foodList;
+
 
         public Snake(int x, int y, int bx , int by, char c = 'O')
         {
@@ -63,8 +64,9 @@ namespace ConsoleLinkedSnake.Models
             head.X += MoveX;
             head.Y += MoveY;
 
-            // Hit tests walls and food
+            // Hit tests walls
             if (Hittest_walls(head.X, head.Y)) return false;
+            
 
             // Draw the head in the new position
             Console.SetCursorPosition(head.X, head.Y);
@@ -127,9 +129,41 @@ namespace ConsoleLinkedSnake.Models
             SnakeLength++;
         }
 
-        internal bool HitFood(List<Point> foodList)
+        public bool HitFood(List<Point> foodList)
         {
-            throw new NotImplementedException();
+            foreach (Point item in foodList)
+            {
+                if(item.X == X && item.Y == Y)
+                {
+                    // Add length to the tail
+                    AddTail();
+                    // Remove food from list
+                    foodList.Remove(item);
+                    
+                    return true;
+                    // No need to erase character, since the snake is moving over it
+                }
+            }
+            return false;
+            
+        }
+
+        internal bool EatSnake()
+        {
+            // Loop through the snake and test if the head hit a tail.
+            ISnakePart tail = 
+                Next;
+
+            // Loop though the linked list
+            while (tail != null)
+            {
+                // Test if head is at this tail position
+                if (X == tail.X && Y == tail.Y) return true;
+
+                // go to next item in the linked list
+                tail = tail.Next;
+            }
+            return false;
         }
     }
 }

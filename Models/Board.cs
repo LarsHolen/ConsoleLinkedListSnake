@@ -7,11 +7,14 @@ namespace ConsoleLinkedSnake.Models
     {
         private readonly int height;
         private readonly int width;
+
         public Board(int w, int h)
         {
             height = h;
             width = w;
         }
+
+
 
         /// <summary>
         /// Drawing a square around the playfield

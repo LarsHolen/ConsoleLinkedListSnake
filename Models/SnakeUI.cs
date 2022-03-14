@@ -25,10 +25,9 @@ namespace ConsoleLinkedSnake.Models
         public void DrawUI()
         {
             Console.SetCursorPosition(posX, posY);
-            Console.Write("Score: " + score.ToString());
-            
-
-
+            Console.Write("Score:");
+            Console.SetCursorPosition(posX, posY + 2);
+            Console.Write(score.ToString());
         }
     }
 }
