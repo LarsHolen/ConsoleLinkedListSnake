@@ -24,7 +24,7 @@ namespace ConsoleLinkedSnake
         private static readonly int gameSpeedStart = 100;
         private static int gameSpeed = gameSpeedStart;
         private static bool scoreChanged = true;
-        private static readonly int gameSpeedIncrease = 5;
+        private static readonly int gameSpeedIncrease = 2;
 
         private static readonly List<Point> foodList = new();
 
