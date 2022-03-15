@@ -10,10 +10,6 @@ WIP simple snake console/text game.
   
   UI/score are only written to screen when its changed.
   
-  Keyboard input WASD/Arrowkeys and space to add to tail
+  Keyboard input WASD/Arrowkeys
   
-  ### TODOO:
-  
-  Add food to increase length.  ATM the snake grows as one click space.
-  Crash tests, walls and tail.
-  Sound?
+![snake](https://user-images.githubusercontent.com/92325738/158147259-0de8a6ce-6e0a-4f6e-abad-79a86838feac.jpg)
